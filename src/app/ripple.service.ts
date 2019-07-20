@@ -177,7 +177,7 @@ export class RippleService  {
         {
             'Memo': {
                 'MemoData': postAsHex.toUpperCase(),
-                'MemoType': '496e64496d6d'.toUpperCase()
+                'MemoType': '6e646d2d76302e39'.toUpperCase()
             }
         }
       ],
