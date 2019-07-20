@@ -1,0 +1,88 @@
+<div class="menu-wrapper">
+    <div class="mobile-menu">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html"><img src="assets/images/logo-normal.png" alt=""></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="primary-menu">
+                        <a><li (click)="viewMain()">Home</li></a>
+                        <a><li (click)="viewUpload()">Upload File</li></a>
+                        <a><li (click)="viewViewPortal()">View/Download File</li></a>
+                        <a><li class="secure-highlight" (click)="viewSecure()">Upload Anonymously</li></a>
+                        <a><li (click)="viewDev()">How IndImm Works</li></a>             
+                        <li><a href="mailto:IndImmFS@protonmail.com">Contact</a></li>
+                    </ul>  
+                </div><!--/.nav-collapse -->
+            </div><!--/.container-fluid -->
+        </nav>
+    </div><!-- end mobile-menu -->
+
+    <header class="vertical-header">
+        <div class="vertical-header-wrapper">
+            <nav class="nav-menu">
+                <div class="logo">
+                    <a href="index.html"><img src="assets/images/logo.png" alt=""></a>
+                </div><!-- end logo -->
+                <div class="text-center"><span class="beta">beta 0.9</span></div>
+                <div class="margin-block"></div>
+
+                <ul class="primary-menu">
+                    <a><li (click)="viewMain()">Home</li></a>
+                    <a><li (click)="viewUpload()">Upload File</li></a>
+                    <a><li (click)="viewViewPortal()">View/Download File</li></a>
+                    <a><li class="secure-highlight" (click)="viewSecure()">Upload Anonymously</li></a>
+                    <a><li (click)="viewDev()">How IndImm Works</li></a>             
+                    <li><a href="mailto:IndImmFS@protonmail.com">Contact</a></li>
+                </ul>                  
+                <div class="margin-block"></div>
+                <div class="menu-social">
+                  <ul class="list-inline text-center">
+                      <li><a href="https://bithomp.com/explorer/rPSwPXyDYELvAYKDE9JTTm8DnkqqBAWkDx"><i class="cf cf-xrp"></i></a></li>
+                      <li><a href="https://moneroblocks.info/search/0x973d6f6810BfcF9b3C8D5CAD7cc3b22646459e9A"><i class="cf cf-xmr"></i></a></li>
+                      <li><a href="https://www.blockchain.com/btc/address/1DMeF39xYzjo98EnmzJQ9yikGTYbTQi4hv"><i class="cf cf-btc"></i></a></li>
+                      <li><a href="https://ethplorer.io/address/0x973d6f6810bfcf9b3c8d5cad7cc3b22646459e9a"><i class="cf cf-eth"></i></a></li>
+                      <li><a href="https://chainz.cryptoid.info/ltc/search.dws?q=ltc1qd69dtysjlahcanw3464phq8pxqtwqcly5pjeum"><i class="cf cf-ltc"></i></a></li>
+                  </ul>
+                </div>
+                <!-- <div class="text-center"><span style="display:inline-block">IndImm Addresses</span></div>-->
+                <div class="margin-block"></div>
+                <div class="menu-social">
+                    <ul class="list-inline text-center">
+                        <li><a href="https://www.gab.com/IndImm"><span class="gab">gab</span></a></li>
+                        <li><a href="https://www.twitter.com/ind_imm"><i class="fa fa-twitter"></i></a></li> </ul>
+                  </div>
+                <div class="margin-block"></div>
+
+                <div class="text-center"><span style="display:inline-block">Open Source/Serverless</span></div>
+                <div class="text-center"><span style="display:inline-block">Client runs locally from</span></div>
+                <div class="text-center"><span style="display:inline-block">Github pull.</span></div><br>
+                <div class="text-center sideFooter">
+                  <span style="display:inline-block">Source Code:
+                        <a href="https://github.com/ndm-inf/ndm"><i class="material-icons">
+                                code
+                            </i>
+                        </a>
+                    </span>
+              </div>
+            </nav><!-- end nav-menu -->
+        </div><!-- end vertical-header-wrapper -->
+    </header><!-- end header -->
+</div><!-- end menu-wrapper -->
+
+<div id="wrapper">
+    <div id="home" class="video-section js-height-full">
+   
+        <router-outlet></router-outlet>
+
+      </div>
+</div><!-- end wrapper -->
+
+

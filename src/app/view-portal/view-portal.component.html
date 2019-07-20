@@ -1,0 +1,36 @@
+<div class="overlay"></div>
+<div class="home-text-wrapper relative container">
+    <div class="home-message">
+        <img src="assets/images/biglogo.png" alt="">
+        <p>IndImm</p>
+        <div class="btn-wrapper">
+            <div class="text-center">
+                Tx Id: <input type="text'" [(ngModel)] = "txID"> &nbsp; Min Ledger:  <input type="text'" [(ngModel)] = "minLedger">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+                <div class="net-toggle">
+                <mat-slide-toggle
+                class=""
+                color="green"
+                [(ngModel)]="IsDev"
+                >
+                Use TestNet
+                </mat-slide-toggle>
+            </div>
+            </div>
+            <div class="col-lg-4"></div>
+        </div>
+        <br>
+        <div class="btn-wrapper">
+            <div class="text-center">
+                <div (click)="ViewFile()" class="btn btn-wrapper btn-default btn-round">View File</div>
+            </div>
+        </div>
+        <h2>Indestructible. Immutable. Infinite File Storage.</h2>
+                <h4>Hosted on Ripple Blockchain</h4>
+    </div>
+</div>

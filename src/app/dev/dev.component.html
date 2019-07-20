@@ -1,0 +1,27 @@
+   
+<div class="container bgblack">
+    <div class="section-title text-center">
+        <h3>How IndImm Works</h3>
+    </div>
+    <div class="row uk-text-center main-container">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <div class="sub-container">
+                <div class="sub-content">
+                    <h1>How does a file get to the Ripple Blockchain</h1>
+                    <div class="sub-body">
+                            Below is a quick summary on how IndImm works. More detailed high level and low/dev level documentation will be provided shortly. All sourcecode is available at <a href="https://github.com/ndm-inf/ndm">https://github.com/ndm-inf/ndm</a> where the master branch is what is currently deployed.                    </div>
+                    
+                    <div class="sub-content sc2">
+                        <div class="sub-content">
+                            The highlight/10,000 ft view of how IndImm works is that IndImm takes any file and loads it into local memory in your browser with the IndImm client and attaches the file as a Base64 string to a ripple payment. When the payment is sent, the file data is attached directly to the payment and once confirmed on the ripple ledger across all decentralized ripple validators, it remains permanent on the ripple ledger and cannot be removed and changed and is therefore Indestructible and Immutable. 
+                            <br><br>
+                            However, most files one would want to potentially store with IndImm will be much larger than what can be stored with a single ripple transaction and thus, IndImm chunks the file into small portions that each will fit into a single transaction and stores the file across multiple transactions which are chained together sequentially with pointers to each child transaction. Lastly, a root transaction is sent to ripple containing a reference to the transaction chain. To pull a file from the ripple blockchain, the root transaction is referenced and associated chained transactions chunks are pulled and recombined back into a single file. In addition to the file chain reference in the root transaction, additional text can be included with the file and is stored in a separate child transaction chain referenced by the root object.
+                         </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+</div>
