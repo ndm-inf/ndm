@@ -18,6 +18,6 @@ Navigate to `http://localhost:4200/`
 ## Donate
 XRP:rJ383ZRZ1o4KCZKtDH2MDFehhaXKaiaDBu
 XMR:495i5YirqevhLX8xi99cPwPTxKsLNTvr37mSUHxKrSZDe39oa8NRXMPah92GLNADxf9AwEo1Jf9WH1HhtxJ9HAgmNgbyCWS
-BTC:1DMeF39xYzjo98EnmzJQ9yikGTYbTQi4hv
+BTC:1B5HwRYy1T3nZzxEkFUcvityqMzaoX31Jf
 ETH:0x973d6f6810BfcF9b3C8D5CAD7cc3b22646459e9A
 LTC:ltc1qd69dtysjlahcanw3464phq8pxqtwqcly5pjeum
