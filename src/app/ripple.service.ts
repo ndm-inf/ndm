@@ -3,6 +3,8 @@ import { ChunkingUtility } from './chunking-utility';
 import { GeneralResult } from './general-result';
 import { IndImmConfigService } from './ind-imm-config.service';
 import {ToastrService} from 'ngx-toastr';
+import {FileProgressService} from './file-progress.service';
+
 declare var ripple: any;
 
 @Injectable({
@@ -15,9 +17,14 @@ export class RippleService  {
   public Config: IndImmConfigService;
   toaster: ToastrService;
   public Connected = false;
-  constructor(cfg: IndImmConfigService, tstr: ToastrService) {
+  sequenceNumber = 0;
+  public AccountForSequence = '';
+  FileProgressService: FileProgressService;
+
+  constructor(cfg: IndImmConfigService, tstr: ToastrService, filePrgSvc: FileProgressService) {
     this.toaster = tstr;
     this.Config = cfg;
+    this.FileProgressService = filePrgSvc;
     // this.ConnectAPI();
    }
 
@@ -27,6 +34,19 @@ export class RippleService  {
      }
    }
 
+   public async CheckSequence() {
+      if (this.AccountForSequence.length > 0) {
+        /*  this.api.getAccountInfo(this.AccountForSequence).then(info =>  {
+            this.sequenceNumber = info.sequence + 1;
+        }); */
+        const info = await this.api.getAccountInfo(this.AccountForSequence);
+        this.sequenceNumber = info.sequence;
+      }
+   }
+
+   public IncrementSequence() {
+      this.sequenceNumber++;
+   }
    public async ConnectAPI() {
     this.api = new ripple.RippleAPI({ server: this.Config.GetRippleServer() });
 
@@ -41,6 +61,7 @@ export class RippleService  {
           this.maxLedgerVersion = Number(ledgers[1]);
           this.api.on('ledger', ledger => {
             this.maxLedgerVersion = Number(ledger.ledgerVersion);
+            // this.CheckSequence();
           });
           console.log('Most recent hash: ' + server_info.validatedLedger.hash);
           this.toaster.show('Connected to Ripple (' + this.Config.GetEnvironmentName() + '): '
@@ -109,26 +130,45 @@ export class RippleService  {
 
   public async IsSenderSecretValid(sender, secret) {
     try {
-      // refactor to not use try catch
       const tx = await this.Prepare('test', sender);
-      await this.SignAndSubmit(tx, secret);
+      await this.SignOnly(tx, secret);
       return true;
     } catch (e) {
       console.log(e);
       return false;
     }
   }
+
+  public async SignOnly(trx, secret: string) {
+    const response = this.api.sign(trx, secret);
+    const txID = response.id;
+  }
+
   public async SignAndSubmit(trx, secret: string) {
     const response = this.api.sign(trx, secret);
     const txID = response.id;
 
-    console.log('Identifying hash:', txID);
+    // console.log('Identifying hash:', txID);
     const txBlob = response.signedTransaction;
-    console.log('Signed blob:', txBlob);
+    // console.log('Signed blob:', txBlob);
 
-    await this.doSubmit(txBlob).then((resultForSubmit) => {
-        this.maxLedgerVersion = Number(resultForSubmit);
-    });
+    let submitResultInNoError = false;
+
+    while (!submitResultInNoError) {
+      const result = await this.doSubmit(txBlob);
+      if (result === 'telINSUF_FEE_P') {
+        submitResultInNoError = false;
+        console.log('Fees too high, retrying');
+        this.FileProgressService.ShowHighFeeNotification = true;
+        this.FileProgressService.HighFeeAttemptCount++;
+        const cu: ChunkingUtility = new ChunkingUtility();
+        await cu.sleep(1000);
+      } else {
+        submitResultInNoError = true;
+        this.FileProgressService.ShowHighFeeNotification = false;
+        this.FileProgressService.HighFeeAttemptCount = 0;
+      }
+  }
     return txID;
   }
 
@@ -139,7 +179,8 @@ export class RippleService  {
     console.log('Tentative result code:', result.resultCode);
     console.log('Tentative result message:', result.resultMessage);
 
-    return latestLedgerVersion + 1;
+    this.maxLedgerVersion = latestLedgerVersion + 1;
+    return result.resultCode;
   }
 
   public async ValidateTransaction(txToValidate, minLedgerVersion) {
@@ -171,6 +212,7 @@ export class RippleService  {
 
     const preparedTx = await this.api.prepareTransaction({
       'TransactionType': 'Payment',
+      'Sequence': this.sequenceNumber,
       'Account': sender,
       'Amount': this.api.xrpToDrops('0.000001'),
       'Memos': [
@@ -187,9 +229,11 @@ export class RippleService  {
       'maxLedgerVersionOffset': 75
     });
 
-    console.log('Prepared transaction instructions:', preparedTx.txJSON);
-    console.log('Transaction cost:', preparedTx.instructions.fee, 'XRP');
-    console.log('Transaction expires after ledger:', preparedTx.instructions.maxLedgerVersion);
+    this.sequenceNumber++;
+    console.log('Prepared transaction sequence:' + preparedTx.instructions.sequence);
+    // console.log('Prepared transaction instructions:', preparedTx.txJSON);
+    // console.log('Transaction cost:', preparedTx.instructions.fee, 'XRP');
+    // console.log('Transaction expires after ledger:', preparedTx.instructions.maxLedgerVersion);
     return preparedTx.txJSON;
   }
 }

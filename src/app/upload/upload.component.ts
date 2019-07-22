@@ -99,11 +99,19 @@ export class UploadComponent implements OnInit {
     this.UploadFileAndDisplay(this.fileAsBase64, this.fileMetaData);
   }
 
+  public async Cancel () {
+    this.toaster.error('Cancelling', 'Cancelling upload and refreshing');
+
+    await this.fileUploadManager.rippleService.api.disconnect();
+    location.reload();
+  }
   public async UploadFileAndDisplay(fileAsBase64, fileMetaData) {
     if (fileMetaData.length === 0) {
       fileMetaData = 'File Contains no additional text';
     }
     this.fileUploadManager.SetCredentials(this.sender, this.secret);
+    this.fileUploadManager.rippleService.AccountForSequence = this.sender;
+    await this.fileUploadManager.rippleService.CheckSequence();
 
     const rootTx = await this.fileUploadManager.CreateFile(fileAsBase64, fileMetaData, this.fileToUpload.name,
       this.fileToUpload.type, '', '0.9');

@@ -131,15 +131,34 @@
                 </div>
               </div>
             </div>
+            <div [hidden]="!fileProgressService.ShowHighFeeNotification">
+              <div class="btn btn-wrapper btn-round uploadWarning" style="width:100%">
+                Waiting for Ripple Fees to Lower. Attempt: {{ fileProgressService.HighFeeAttemptCount}} 
+              </div>
+              <br><br>
+            </div>
             <div [hidden]="fileProgressService.RootFileProcessing">
             <div (click)="UploadFile()" class="btn btn-wrapper btn-primary btn-round" style="width:100%">Upload</div>
             </div>
             <div [hidden]="!fileProgressService.RootFileProcessing">
-            <div  class="btn btn-wrapper btn-primary btn-round" style="width:100%">Uploading...</div>
+            <div (click)="Cancel()" class="btn btn-wrapper btn-primary btn-round" style="width:100%">Uploading...Press to cancel</div>
             </div>
             <br>
             <div [hidden]="!showViewFileButton">
               <div (click)="ViewFile()" class="btn btn-wrapper btn-default btn-round" style="width:100%">View File</div>
+            </div>
+            <div class="progress-container">
+              <h3>&nbsp;Notes:</h3>
+              <div class="progress-item-container"> 
+                <div>*Uploads are time consuming as it sends data in 800 byte chunks. Make your file as small as possible.</div>
+                <div>*Upload pause/resume functionality does not exist and will be available in near future.</div>
+                <div>*If an upload fails, it is not recoverable and must be restarted. Automatic refunding coming soon. Email us your address if you need a refund.</div>
+                <div>*During high fee periods, the transactions are held until fees deescalate. Notification displays in the UI. Typically lasts seconds to minutes.</div>
+                <div>*You can upload to Ripple testnet for free by checking "Use Testnet", obtain Testnet Ripple and address from <a href="https://developers.ripple.com/xrp-test-net-faucet.html"> Ripple's Faucet.</a></div>
+                <div>*Uploads are currently facilitated throgh Ripple's public server. It is available 99% of the time. We are currently setting up our own Server/Validator.</div>
+                <div>*Uploads are permanent and not able to be modified. Uploads are <span class="red"><u><b>NOT Anonymous</b></u></span> unless you follow instructions in side bar.</div>
+                <div class="green"><b>*Current Approximate Cost: 3.6 Megabyte/XRP</b></div>
+              </div>
             </div>
         </div>
 
