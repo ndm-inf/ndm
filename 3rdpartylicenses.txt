@@ -85,6 +85,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+@angular/material/dialog
+
+@angular/material/form-field
+
 @angular/material/progress-bar
 
 @angular/material/progress-spinner
