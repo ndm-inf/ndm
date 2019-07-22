@@ -67,3 +67,10 @@ a:visited {
 .red {
    color: rgb(189, 3, 3);
 }
+.custom-modalbox {
+   mat-dialog-container {
+    background-color: #000 !important; 
+    border-radius: 12px;  
+
+   }
+ }

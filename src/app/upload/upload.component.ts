@@ -10,7 +10,8 @@ import {Router} from '@angular/router';
 import {IndImmConfigService} from '../ind-imm-config.service';
 import {MatSlideToggle} from '@angular/material';
 import {ToastrService} from 'ngx-toastr';
-
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -30,6 +31,7 @@ export class UploadComponent implements OnInit {
   fileDownloadProgressService: FileDownloadProgressService;
   config: IndImmConfigService;
   toaster: ToastrService;
+  dialog: MatDialog;
 
   Router: Router;
   roundRobinTest: string;
@@ -96,7 +98,18 @@ export class UploadComponent implements OnInit {
       this.toaster.warning('Invalid Secret', 'Please verify the Secret entered for your XRP Address');
       return;
     }
-    this.UploadFileAndDisplay(this.fileAsBase64, this.fileMetaData);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '650px',
+      panelClass: 'custom-modalbox'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === 'confirm') {
+        this.UploadFileAndDisplay(this.fileAsBase64, this.fileMetaData);
+      } else {
+        this.toaster.warning('Uploading Aborted', 'Confirm was not entered in modal.');
+      }
+    });
   }
 
   public async Cancel () {
@@ -133,7 +146,7 @@ export class UploadComponent implements OnInit {
   public constructor(private fileUploadManagerSer: FileUploadManagerService,
     fileDownloadManagerSer: FileDownloadManagerService, fileProgressSer: FileProgressService,
     FileDownloadProgressSer: FileDownloadProgressService, router: Router, cfg: IndImmConfigService,
-    tstr: ToastrService) {
+    tstr: ToastrService, public dlg: MatDialog) {
       this.fileUploadManager = fileUploadManagerSer;
       this.fileDownloadManager = fileDownloadManagerSer;
       this.fileProgressService = fileProgressSer;
@@ -141,6 +154,7 @@ export class UploadComponent implements OnInit {
       this.config = cfg;
       this.Router = router;
       this.toaster = tstr;
+      this.dialog = dlg;
       this.fileUploadManager.rippleService.ForceConnectIfNotConnected();
   }
 

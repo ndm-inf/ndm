@@ -1,0 +1,50 @@
+.main-container{
+    background-color: rgba(52, 52, 52, 0.55);
+    border-radius: 12px;
+    padding:10px;
+    margin:10px;
+ }
+
+.sub-container{
+    background-color: rgba(32, 32, 32, 0.75);
+    border-radius: 12px;
+    margin:5px;
+    padding:5px;
+ }
+
+ .content-container{
+    background-color: rgba(16, 16, 16, 0.85);
+    border-radius: 12px;
+    padding:10px;
+    margin:10px;
+    color: white;
+ }
+
+ h2 {
+     color:white;
+ }
+
+ .custom-modalbox {
+   mat-dialog-container {
+    background-color: #000 !important; 
+    border-radius: 12px;  
+
+   }
+ }
+
+ p {
+    color: rgb(119, 118, 118);
+ }
+
+ .btnmod {
+   border-radius: 12px;
+   width: 100%
+ }
+ .spacerm{
+    margin:7px;
+    padding:7px;
+ }
+
+ .confirmText{
+    background-color:white;
+ }

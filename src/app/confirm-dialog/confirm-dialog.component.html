@@ -1,0 +1,26 @@
+<div class="main-conter">
+  <h2 mat-dialog-title>Confirm Upload</h2>
+  <div mat-dialog-content class="sub-container">
+    <p>Confirm that you understand that the file you are uploading will be permanent on the ripple blockchain and can never be removed or altered. 
+    </p>
+    <br>
+    <p>IndImm, this software, and it's author('s) offer no explicit or implied guarantee of anonymity or privacy. There is a guide in the side bar 
+        on how to accomplish this, but this due dilegence is up to the uploader.
+    </p>
+    <br>
+    <p>IndImm, this software, and it's author('s) are not responsible for, and does not promote, the use of IndImm for any illegal purposes.
+       The IndImm software acts simply as an interface between your local device and the ripple blockchain to attach data to payments.
+    </p>
+    <div class="sub-container">
+      <div mat-dialog-actions class="content-container">
+
+        Type "confirm" in the input below and press ok to acknowledge the above:
+        <mat-form-field>
+          <input matInput [(ngModel)]="confirmText" class="confirmText">
+        </mat-form-field>     
+    </div>
+    <div class="spacerm">
+        <button mat-button [mat-dialog-close]="confirmText" cdkFocusInitial class="btn btn-wrapper btn-default btn-round btnmod">Ok</button>
+      </div>
+  </div>
+</div>
