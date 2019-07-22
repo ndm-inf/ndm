@@ -7,7 +7,7 @@ import {ConfigEnvironment} from './config-environment.enum';
 
 export class IndImmConfigService {
   public Environment: ConfigEnvironment;
-  public IsDev = true;
+  public IsDev = false;
 
   constructor() {
   }
