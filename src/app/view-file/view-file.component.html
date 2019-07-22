@@ -66,21 +66,30 @@
                 <div (click)="SaveFile()" class="btn btn-wrapper btn-default btn-round" style="width:100%">Save File</div>
         </div>
         <div class="row uk-text-center upload-container">
-                <div class="col-lg-2"></div>
+            <div class="col-lg-2"></div>
+
+            <div class="col-lg-8">
+                    <div class="progress-container">
     
-                <div class="col-lg-8">
-                        <div class="progress-container">
-        
-                                <div class="progress-item-container" [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
-                                    <h4>MetaData</h4>    
-                                    {{ roundRobinText }}
-                                </div>
+                            <div class="progress-item-container" [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
+                                <h4>MetaData</h4>    
+                                {{ roundRobinText }}
                             </div>
-                </div>
-                <div class="col-lg-2"></div>
+                        </div>
             </div>
-            <div [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
-                    <div (click)="SaveMetaFile()" class="btn btn-wrapper btn-default btn-round" style="width:100%">Save Metadata File</div>
+            <div class="col-lg-2"></div>
+        </div>
+        <div [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
+                <div (click)="SaveMetaFile()" class="btn btn-wrapper btn-default btn-round" style="width:100%">Save Metadata File</div>
+        </div>
+        <div class="progress-container">
+            <h3>&nbsp;Notes:</h3>
+            <div class="progress-item-container"> 
+              <div>*Newly uploaded files on occasion take a few minutes after validation to successfully pull.</div>
+              <div>*Files of type PNG, JPEG, PDF, and MP4 will display in viewer once downloaded. All other files will have to be saved locally.</div>
+              <div>*Display viewer might for large width/height files may not autoscale correctly. This is being addressed.</div>
+              <div>*If there is an issue downloading a file from the ripple blockchain, a friendly error might not display. This is being addressed.</div>
             </div>
+          </div>
     </div>
 

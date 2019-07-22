@@ -1,6 +1,11 @@
-# IndImmUI
+# Run IndImmUI Locally
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.2.
+Clone this repo: https://github.com/ndm-inf/ndm.git
+Install Angular CLI: npm install -g @angular/cli
+Install Dependencies: npm install
+Run Locally: ng serve
+Navigate to `http://localhost:4200/`
 
 ## How does IndImm work
 
@@ -10,6 +15,9 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
             However, most files one would want to potentially store with IndImm will be much larger than what can be stored with a single ripple transaction and thus, IndImm chunks the file into small portions that each will fit into a single transaction and stores the file across multiple transactions which are chained together sequentially with pointers to each child transaction. Lastly, a root transaction is sent to ripple containing a reference to the transaction chain. To pull a file from the ripple blockchain, the root transaction is referenced and associated chained transactions chunks are pulled and recombined back into a single file. In addition to the file chain reference in the root transaction, additional text can be included with the file and is stored in a separate child transaction chain referenced by the root object.
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Donate
+XRP:rJ383ZRZ1o4KCZKtDH2MDFehhaXKaiaDBu
+XMR:495i5YirqevhLX8xi99cPwPTxKsLNTvr37mSUHxKrSZDe39oa8NRXMPah92GLNADxf9AwEo1Jf9WH1HhtxJ9HAgmNgbyCWS
+BTC:1DMeF39xYzjo98EnmzJQ9yikGTYbTQi4hv
+ETH:0x973d6f6810BfcF9b3C8D5CAD7cc3b22646459e9A
+LTC:ltc1qd69dtysjlahcanw3464phq8pxqtwqcly5pjeum

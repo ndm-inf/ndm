@@ -69,7 +69,7 @@ export class UploadComponent implements OnInit {
       this.xrpBalance = await this.fileUploadManager.rippleService.GetXRPBalance(this.sender);
     }
     if (this.fileToUpload) {
-    this.estCost = 0.000016 * this.fileToUpload.size / 800;
+    this.estCost =  0.00027 * (this.fileToUpload.size);
     }
   }
 
@@ -104,7 +104,7 @@ export class UploadComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result === 'confirm') {
+      if (result === 'confirm') {
         this.UploadFileAndDisplay(this.fileAsBase64, this.fileMetaData);
       } else {
         this.toaster.warning('Uploading Aborted', 'Confirm was not entered in modal.');
