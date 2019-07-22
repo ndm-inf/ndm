@@ -69,7 +69,7 @@ export class UploadComponent implements OnInit {
       this.xrpBalance = await this.fileUploadManager.rippleService.GetXRPBalance(this.sender);
     }
     if (this.fileToUpload) {
-    this.estCost =  0.00027 * (this.fileToUpload.size);
+    this.estCost =  0.0000027 * (this.fileToUpload.size);
     }
   }
 
