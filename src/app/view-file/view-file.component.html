@@ -44,6 +44,12 @@
               </div>
               <div class="col-lg-3"></div>
           </div>
+          <div [hidden]="!fileDownloadProgressService.DownloadInWarningState">
+            <div class="btn btn-wrapper btn-round downloadWarning" style="width:100%">
+              Error pulling chunk, Attempting auto-resume. Attempt: {{ fileDownloadProgressService.AttemptsInWarningState}} 
+            </div>
+            <br><br>
+          </div>
    </div>
 
    <div class="container">
@@ -89,7 +95,7 @@
               <div>*Files of type PNG, JPEG, PDF, and MP4 will display in viewer once downloaded. All other files will have to be saved locally.</div>
               <div>*Display viewer might for large width/height files may not autoscale correctly. This is being addressed.</div>
               <div>*If there is an issue downloading a file from the ripple blockchain, a friendly error might not display. This is being addressed.</div>
-              <div>*If there is an issue downloading a file from the ripple blockchain, it must be restarted. Automatic resume is being developed.</div>
+              <div>*If there is an issue downloading a file from the ripple blockchain, it may need to be restarted. Automatic resume is partially functional.</div>
               <div>*If the file is older and will not load and you are sure the Transaction ID and Ledger are correct, it may not be available on Ripple's primary public node. It Is available on the historical node and we are working on autodetecting when to pull from the historical node.</div>
             </div>
           </div>

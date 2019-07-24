@@ -19,6 +19,16 @@ export class FileDownloadProgressService {
   public RootFileDownloadProcessing = false;
   public RootFileDownloadComplete = false;
 
+  public DownloadInWarningState = false;
+  public AttemptsInWarningState = 0;
+  public WarningStateSource = ''; // move to enum later
+
   public FileDownloadComplete = false;
+
+  public ResetWarningState () {
+    this.DownloadInWarningState = false;
+    this.AttemptsInWarningState = 0;
+    this.WarningStateSource = '';
+  }
   constructor() { }
 }

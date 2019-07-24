@@ -51,11 +51,29 @@ export class FileDownloadManagerService {
     return returnModel;
   }
 
+  private async processGetFileDetail(txId, ledger, type): Promise<GeneralResult> {
+    while (true) {
+      const returnDetail = await this.rippleFileService.GetFileDetail(txId, ledger);
+      if (returnDetail.success) {
+        this.fileDownloadProgressService.ResetWarningState();
+        return returnDetail;
+      } else {
+        this.chunkingUtility.sleep(3000);
+        this.fileDownloadProgressService.WarningStateSource = type;
+        this.fileDownloadProgressService.DownloadInWarningState = true;
+        this.fileDownloadProgressService.AttemptsInWarningState++ ;
+      }
+    }
+  }
+
   public async GetRawFileDetail(rootFile: RootFile, ledger: string) {
 
     this.fileDownloadProgressService.TotalFileMetaDataChunks = rootFile.fileMetaDataDetailChunkCount;
+    let parentFileResult: GeneralResult;
 
-    let parentFileResult: GeneralResult = await this.rippleFileService.GetFileDetail(rootFile.fileMetaDataDetailTxId, ledger);
+    parentFileResult = await this.processGetFileDetail(rootFile.fileMetaDataDetailTxId, ledger,
+      'Getting File Metadata contents - root file');
+
     this.fileDownloadProgressService.TotalFileMetaDataChunksDownloaded = 1;
     this.fileDownloadProgressService.TotalFileMetaDataChunksDownloadedPercent = Math.ceil(100 * (
       this.fileDownloadProgressService.TotalFileMetaDataChunksDownloaded / this.fileDownloadProgressService.TotalFileMetaDataChunks
@@ -67,7 +85,9 @@ export class FileDownloadManagerService {
 
     while (true) {
       if (parentFileDetail.NextTxPointer && parentFileDetail.NextTxPointer.length > 0) {
-        parentFileResult = await this.rippleFileService.GetFileDetail(parentFileDetail.NextTxPointer, ledger);
+        parentFileResult = await this.processGetFileDetail(parentFileDetail.NextTxPointer, ledger,
+          'Getting File Metadata contents - root file detail');
+
         parentFileDetail = parentFileResult.data;
         fileDetailArray.push(parentFileDetail);
         this.fileDownloadProgressService.TotalFileMetaDataChunksDownloaded++;
@@ -95,8 +115,11 @@ export class FileDownloadManagerService {
     this.fileDownloadProgressService.TotalFileDetailChunksDownloaded = 1;
     this.fileDownloadProgressService.TotalFileDetailChunksDownloadedPercent = Math.ceil(100 * (
       this.fileDownloadProgressService.TotalFileDetailChunksDownloaded / this.fileDownloadProgressService.TotalFileDetailChunks));
+    let parentFileResult: GeneralResult;
 
-    let parentFileResult: GeneralResult = await this.rippleFileService.GetFileDetail(rootFile.fileDetailTxId, ledger);
+    parentFileResult = await this.processGetFileDetail(rootFile.fileDetailTxId, ledger,
+      'Getting File Metadata contents - root metadata');
+
     let parentFileDetail: FileDetail = parentFileResult.data;
     const fileDetailArray: FileDetail[] = [];
 
@@ -104,7 +127,9 @@ export class FileDownloadManagerService {
 
     while (true) {
       if (parentFileDetail.NextTxPointer && parentFileDetail.NextTxPointer.length > 0) {
-        parentFileResult = await this.rippleFileService.GetFileDetail(parentFileDetail.NextTxPointer, ledger);
+        parentFileResult = await this.processGetFileDetail(parentFileDetail.NextTxPointer, ledger,
+          'Getting File Metadata contents - metadata detail');
+
         parentFileDetail = parentFileResult.data;
         fileDetailArray.push(parentFileDetail);
 
