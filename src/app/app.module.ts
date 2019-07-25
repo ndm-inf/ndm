@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatProgressSpinnerModule, MatRadioModule, MatSliderModule, MatProgressBarModule, MatSlideToggleModule,
   MatFormFieldModule, MatDialogModule, MatInputModule} from '@angular/material';
+import { MatVideoModule } from 'mat-video';
+
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { UploadComponent } from './upload/upload.component';
 import { MainComponent } from './main/main.component';
@@ -33,7 +35,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     AppRoutingModule,
     BrowserAnimationsModule,
     MatProgressSpinnerModule, MatRadioModule, MatSliderModule, MatProgressBarModule, MatSlideToggleModule,
-    MatFormFieldModule, MatDialogModule, MatInputModule,
+    MatFormFieldModule, MatDialogModule, MatInputModule, MatVideoModule,
     ToastrModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,

@@ -60,8 +60,13 @@
                 <div class="progress-container">
 
                     <div class="progress-item-container text-center" [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
-                        <span  style="display:inline-block">
-                            <tld-file-viewer [src]="src" [type]="type"></tld-file-viewer>
+                        <div [hidden]="hideDefaultViewer">
+                            <span [hidden]="hideDefaultViewer" style="display:inline-block">
+                                <tld-file-viewer [src]="src" [type]="type"></tld-file-viewer>
+                            </span>
+                        </div>
+                        <span [hidden]="hideWebmViewer">
+                            <mat-video #video [src]="src"></mat-video>
                         </span>
                     </div>
                 </div>

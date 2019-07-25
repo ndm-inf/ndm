@@ -30,6 +30,8 @@ export class ViewFileComponent implements OnInit {
   src: string;
   type: FileMimeType;
   CurrentFile: FileModel;
+  hideDefaultViewer = true;
+  hideWebmViewer = true;
 
   public constructor(private fileUploadManagerSer: FileUploadManagerService,
     fileDownloadManagerSer: FileDownloadManagerService, fileProgressSer: FileProgressService,
@@ -47,13 +49,25 @@ export class ViewFileComponent implements OnInit {
 
       if (response.mimeType.toLowerCase().includes('png')) {
         this.type = FileMimeType.PNG;
+        this.hideDefaultViewer = false;
+        this.hideWebmViewer = true;
       } else  if (response.mimeType.toLowerCase().includes('pdf')) {
         this.type = FileMimeType.PDF;
+        this.hideDefaultViewer = false;
+        this.hideWebmViewer = true;
       } else  if (response.mimeType.toLowerCase().includes('jpeg')) {
         this.type = FileMimeType.JPEG;
+        this.hideDefaultViewer = false;
+        this.hideWebmViewer = true;
       } else if (response.mimeType.toLowerCase().includes('mp4')) {
         this.type = FileMimeType.MP4;
-      } else {
+        this.hideDefaultViewer = false;
+        this.hideWebmViewer = true;
+      } else if (response.mimeType.toLowerCase().includes('webm')) {
+        this.type = FileMimeType.WEBM;
+        this.hideDefaultViewer = true;
+        this.hideWebmViewer = false;
+      }  else {
         this.type = null;
         this.toaster.show('Cannot Preview File. Can download only',
            'Warning', {
@@ -61,6 +75,8 @@ export class ViewFileComponent implements OnInit {
             disableTimeOut: true,
             toastClass: 'ngx-toastr tstr-warning'
            });
+           this.hideWebmViewer = true;
+
       }
       this.CurrentFile = response;
       this.src = 'data:' + response.mimeType + ';base64,'  + response.FileAsBase64;
