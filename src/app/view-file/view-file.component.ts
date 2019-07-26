@@ -32,6 +32,7 @@ export class ViewFileComponent implements OnInit {
   CurrentFile: FileModel;
   hideDefaultViewer = true;
   hideWebmViewer = true;
+  hideGifViewer = true;
 
   public constructor(private fileUploadManagerSer: FileUploadManagerService,
     fileDownloadManagerSer: FileDownloadManagerService, fileProgressSer: FileProgressService,
@@ -51,23 +52,33 @@ export class ViewFileComponent implements OnInit {
         this.type = FileMimeType.PNG;
         this.hideDefaultViewer = false;
         this.hideWebmViewer = true;
+        this.hideGifViewer = true;
       } else  if (response.mimeType.toLowerCase().includes('pdf')) {
         this.type = FileMimeType.PDF;
         this.hideDefaultViewer = false;
         this.hideWebmViewer = true;
+        this.hideGifViewer = true;
       } else  if (response.mimeType.toLowerCase().includes('jpeg')) {
         this.type = FileMimeType.JPEG;
         this.hideDefaultViewer = false;
         this.hideWebmViewer = true;
+        this.hideGifViewer = true;
       } else if (response.mimeType.toLowerCase().includes('mp4')) {
         this.type = FileMimeType.MP4;
         this.hideDefaultViewer = false;
         this.hideWebmViewer = true;
+        this.hideGifViewer = true;
       } else if (response.mimeType.toLowerCase().includes('webm')) {
         this.type = FileMimeType.WEBM;
         this.hideDefaultViewer = true;
         this.hideWebmViewer = false;
-      }  else {
+        this.hideGifViewer = true;
+      }  else if (response.mimeType.toLowerCase().includes('gif')) {
+        this.type = FileMimeType.GIF;
+        this.hideDefaultViewer = true;
+        this.hideWebmViewer = true;
+        this.hideGifViewer = false;
+      } else {
         this.type = null;
         this.toaster.show('Cannot Preview File. Can download only',
            'Warning', {

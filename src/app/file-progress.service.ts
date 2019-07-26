@@ -25,6 +25,7 @@ export class FileProgressService {
   public RootFileComplete = false;
 
   public ShowHighFeeNotification = false;
+  public ShowFatalError = false;
   public HighFeeAttemptCount = 0;
 
   constructor() {
@@ -49,6 +50,7 @@ export class FileProgressService {
     this.RootFileProcessing = false;
     this.RootFileComplete = false;
     this.ShowHighFeeNotification = false;
+    this.ShowFatalError = false;
     this.HighFeeAttemptCount = 0;
   }
 }

@@ -144,6 +144,12 @@
               </div>
               <br><br>
             </div>
+            <div [hidden]="!fileProgressService.ShowFatalError">
+              <div class="btn btn-wrapper btn-round uploadError" style="width:100%">
+                Fatal and Unrecoverable error while uploading. Uploading stopped.
+              </div>
+              <br><br>
+            </div>
             <div [hidden]="fileProgressService.RootFileProcessing">
             <div (click)="UploadFile()" class="btn btn-wrapper btn-primary btn-round" style="width:100%">Upload</div>
             </div>

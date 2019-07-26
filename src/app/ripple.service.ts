@@ -164,6 +164,10 @@ export class RippleService  {
         this.FileProgressService.HighFeeAttemptCount++;
         const cu: ChunkingUtility = new ChunkingUtility();
         await cu.sleep(1000);
+      } else if (result === 'terPRE_SEQ') {
+        this.FileProgressService.ShowFatalError = true;
+        this.api.disconnect();
+        throw new Error('Fatal Error');
       } else {
         submitResultInNoError = true;
         this.FileProgressService.ShowHighFeeNotification = false;
