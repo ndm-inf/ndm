@@ -9,7 +9,7 @@ import { FileMetaDataDetail } from './file-meta-data-detail';
 import {RootFile} from './root-file';
 import { GeneralResult } from './general-result';
 import {FileProgressService} from './file-progress.service';
-
+import {RootFileIndex} from './root-file-index';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +24,11 @@ export class RippleFileService {
     this.chunkingUtility = new ChunkingUtility();
   }
 
+  public async CreateFileIndexTransaction(rootFileIndex: RootFileIndex, secret, sender) {
+    const tx = await this.rippleService.Prepare(rootFileIndex, sender, this.rippleService.Config.IndexDestinationAddress());
+    const txId = await this.rippleService.SignAndSubmit(tx, secret);
+    return txId;
+  }
   public async CreateFileDetailTransactionChain(imageAsArrayOfBase64, secret, sender): Promise<CreateFileDetailTransactionChainResponse> {
     let prevTxId = '';
     this.fileProgressService.TotalFileDetailChunksUploaded = 0;
@@ -39,7 +44,7 @@ export class RippleFileService {
       if (i > 0) {
         currentFileDetail.NextTxPointer = prevTxId;
       }
-      const tx = await this.rippleService.Prepare(currentFileDetail, sender);
+      const tx = await this.rippleService.Prepare(currentFileDetail, sender, this.rippleService.Config.DestinationAddress());
       prevTxId = await this.rippleService.SignAndSubmit(tx, secret);
 
       this.fileProgressService.TotalFileDetailChunksUploaded++;
@@ -71,7 +76,7 @@ export class RippleFileService {
       const currentFileMetaDataDetail: FileMetaDataDetail = new FileMetaDataDetail();
       currentFileMetaDataDetail.data = metaDataAsArray[i];
 
-      const tx = await this.rippleService.Prepare(currentFileMetaDataDetail, sender);
+      const tx = await this.rippleService.Prepare(currentFileMetaDataDetail, sender, this.rippleService.Config.DestinationAddress());
       prevTxId = await this.rippleService.SignAndSubmit(tx, secret);
 
       this.fileProgressService.TotalFileMetaDataChunksUploaded++;
@@ -105,7 +110,7 @@ export class RippleFileService {
     rootFile.version = version;
     rootFile.minLedgerVersion = minLedgerVersion;
 
-    const tx = await this.rippleService.Prepare(rootFile, sender);
+    const tx = await this.rippleService.Prepare(rootFile, sender, this.rippleService.Config.DestinationAddress());
     const txId = await this.rippleService.SignAndSubmit(tx, secret);
 
     return txId;
@@ -126,6 +131,31 @@ export class RippleFileService {
         console.log(rootFile);
 
         response.data = rootFile;
+        response.success = true;
+    } catch (error) {
+        console.log('Couldn\'t get transaction outcome:', error);
+        response.success = false;
+    }
+    return response;
+  }
+
+  // Todo: refactor to use single getter with type as paramater
+  public async GetRootFileIndexItem(txID, earliestLedgerVersion): Promise<GeneralResult> {
+    const response: GeneralResult = new GeneralResult();
+    response.data = '';
+    try {
+        const tx = await this.rippleService.api.getTransaction(txID, {minLedgerVersion: earliestLedgerVersion});
+
+        console.log('Entire tx:');
+        console.log(tx);
+
+        const memoAsHexString = tx.specification.memos[0];
+        const fileDetail: RootFileIndex  = JSON.parse(memoAsHexString.data);
+
+        console.log('Deserialized RootFileIndex:');
+        console.log(fileDetail);
+
+        response.data = fileDetail;
         response.success = true;
     } catch (error) {
         console.log('Couldn\'t get transaction outcome:', error);

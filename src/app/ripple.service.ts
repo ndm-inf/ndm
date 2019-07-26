@@ -88,6 +88,7 @@ export class RippleService  {
 
   public async ReInit() {
     this.toaster.show('Re-Initializing to server: ' + this.Config.GetRippleServer());
+    this.Connected = false;
     try {
       this.api.disconnect();
     } catch {
@@ -130,7 +131,7 @@ export class RippleService  {
 
   public async IsSenderSecretValid(sender, secret) {
     try {
-      const tx = await this.Prepare('test', sender);
+      const tx = await this.Prepare('test', sender, this.Config.DestinationAddress());
       await this.SignOnly(tx, secret);
       return true;
     } catch (e) {
@@ -205,7 +206,7 @@ export class RippleService  {
     return result;
   }
 
-  public async Prepare(objectToPrepare, sender) {
+  public async Prepare(objectToPrepare, sender, destination) {
     const chunkingUtility = new ChunkingUtility();
 
     const postAsHex = chunkingUtility.StringToHex(JSON.stringify(objectToPrepare));
@@ -223,7 +224,7 @@ export class RippleService  {
             }
         }
       ],
-      'Destination' : this.Config.DestinationAddress()
+      'Destination' : destination // this.Config.DestinationAddress()
       // 'Destination' : 'rwDaZS6khko4v6jEV9wgVpxMyEWw9o1JPb'
       }, {
       'maxLedgerVersionOffset': 75

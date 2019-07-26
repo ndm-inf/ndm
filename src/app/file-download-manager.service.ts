@@ -10,6 +10,8 @@ import { RootFile } from './root-file';
 import {FileModel} from './file-model';
 import { FileMetaDataDetail } from './file-meta-data-detail';
 import { FileDownloadProgressService } from './file-download-progress.service';
+import { RootFileIndex } from './root-file-index';
+import { promise } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +29,31 @@ export class FileDownloadManagerService {
     this.fileDownloadProgressService = fileDownloadProgressSer;
     this.chunkingUtility = new ChunkingUtility();
    }
+
+   public async GetIndex(): Promise<RootFileIndex[]> {
+    await this.rippleService.ForceConnectIfNotConnected();
+    while (!this.rippleService.Connected) {
+      await this.chunkingUtility.sleep(1000);
+    }
+
+    const min = this.rippleService.earliestLedgerVersion;
+    const max = this.rippleService.maxLedgerVersion;
+
+    const unfilteredResults: any[] = await this.rippleService.api.getTransactions(this.rippleService.Config.IndexDestinationAddress(),
+      {minLedgerVersion: min, maxLedgerVersion: max});
+
+      const retSet: RootFileIndex[] = [];
+
+      for (let i = 0; i < unfilteredResults.length; i++) {
+        if ('memos' in unfilteredResults[i].specification) {
+            const indexItem: RootFileIndex  = JSON.parse(unfilteredResults[i].specification.memos[0].data);
+            retSet.push(indexItem);
+          }
+        }
+      return retSet;
+    }
+
+
 
    public async GetRootFile(rootTx, ledger): Promise<FileModel> {
     const returnModel: FileModel = new FileModel();

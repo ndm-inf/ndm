@@ -20,6 +20,14 @@ export class IndImmConfigService {
     }
   }
 
+  public IndexDestinationAddress(): string {
+    if (!this.IsDev) {
+      return 'r3JSxad1Tu3Y6taRdg8VweZ3VA6a2AMHit'; // prod
+    } else {
+      return 'rnG5z3xL41RpLMnrHQXq49U851p57U1C4C';
+    }
+  }
+
   public DestinationAddress(): string {
     if (!this.IsDev) {
       return 'rJ383ZRZ1o4KCZKtDH2MDFehhaXKaiaDBu'; // prod

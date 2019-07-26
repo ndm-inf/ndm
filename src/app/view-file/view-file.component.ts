@@ -98,8 +98,6 @@ export class ViewFileComponent implements OnInit {
     }
     const byteArray = new Uint8Array(fileByteArray);
     const blb = new Blob([byteArray], {type: this.CurrentFile.mimeType});
-    // const fs = window; // require('file-saver');
-    // this.fs.saveAs(blb, this.CurrentFile.fileName);
     saveAs(blb, this.CurrentFile.fileName);
   }
 
@@ -111,7 +109,6 @@ export class ViewFileComponent implements OnInit {
     }
     const byteArray = new Uint8Array(fileByteArray);
     const blb = new Blob([this.CurrentFile.MetaDataAsString], {type: 'text/plain'});
-    // const fs = window; // = require('file-saver');
     saveAs(blb, this.CurrentFile.fileName + '.meta.txt');
   }
 

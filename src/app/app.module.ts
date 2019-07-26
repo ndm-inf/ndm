@@ -18,6 +18,7 @@ import {ToastrModule} from 'ngx-toastr';
 import { AnonymousComponent } from './anonymous/anonymous.component';
 import { DevComponent } from './dev/dev.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { FileIndexComponent } from './file-index/file-index.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     ViewPortalComponent,
     AnonymousComponent,
     DevComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    FileIndexComponent
   ],
   imports: [
     BrowserModule,

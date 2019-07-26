@@ -80,6 +80,9 @@
 
                     <div class="progress-item-container">
                       <h4>Root File Progress</h4>
+                      <div [hidden]="!showIndexingFile">
+                        <h2>Indexing...</h2>
+                      </div>
                       <div class="text-center" [hidden]="!fileProgressService.RootFileProcessing">
                         <span style="display:inline-block"><mat-spinner ></mat-spinner></span></div>
                       <div class="text-center largeIcon" [hidden]="!fileProgressService.RootFileComplete">
@@ -125,6 +128,10 @@
                         </span>   
                       </span>
                   </div>
+                <div class="progress-item-container">
+                  <h4>Description (50 characters):</h4>
+                  <input type="text" [(ngModel)] = "description">
+                </div>
                 <div class="progress-item-container">
                   <h4>Additional text to include:</h4>
                   <textarea [(ngModel)] = "fileMetaData" rows="5"></textarea>

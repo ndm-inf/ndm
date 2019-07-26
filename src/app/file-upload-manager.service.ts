@@ -11,6 +11,7 @@ import { CreateFileDetailTransactionChainResponse } from './create-file-detail-t
 import { FileUploadStatus } from './file-upload-status.enum';
 import { FileValidationStatus } from './file-validation-status.enum';
 import {FileProgressService} from './file-progress.service';
+import { RootFileIndex } from './root-file-index';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,31 @@ export class FileUploadManagerService {
     return rootTx;
   }
 
+  public async CreateFileIndex(rootTx, filename, fileType, sha, version, description, size) {
+    const fileIndex: RootFileIndex = new RootFileIndex();
+    fileIndex.Ledger = await this.GetMinLedgerVersion();
+    fileIndex.TxID = rootTx;
+    fileIndex.description = description;
+    fileIndex.fileName = filename;
+    fileIndex.mimeType = fileType;
+    fileIndex.sha256 = sha;
+    fileIndex.size = size;
+    fileIndex.Version = version;
+    const txId = await this.rippleFileService.CreateFileIndexTransaction(fileIndex, this.secret, this.sender);
+
+    while (true) {
+      await this.chunkingUtility.sleep(5000);
+      const isValidAndConfirmed = await this.rippleService.ValidateTransaction(txId,
+                await this.GetMinLedgerVersion());
+      if (isValidAndConfirmed.success) {
+        this.minLedgerVersions.push(isValidAndConfirmed.data);
+        console.log('Root Tx confirmed:' + txId);
+        break;
+      }
+    }
+    return txId;
+  }
+
   public async CreateRootFileBase (filename: string, fileType: string, sha256: string, fileDetailTx: string,
   fileMetaDataDetailTx: string, fileDetailTxCount: number, fileMetaDataDetailTxCount: number, version: string) {
     this.fileProgressService.RootFileProcessing = true;
@@ -84,8 +110,6 @@ export class FileUploadManagerService {
         break;
       }
     }
-    this.fileProgressService.RootFileProcessing = false;
-    this.fileProgressService.RootFileComplete = true;
 
     return rootTxId;
   }

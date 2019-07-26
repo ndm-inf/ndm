@@ -21,9 +21,12 @@ export class UploadComponent implements OnInit {
   IsDev = true;
 
   showViewFileButton = false;
+  showIndexingFile = false;
+
   fileToUpload: File = null;
   fileAsBase64: string;
   fileMetaData = '';
+  description = '';
 
   fileUploadManager: FileUploadManagerService;
   fileDownloadManager: FileDownloadManagerService;
@@ -128,19 +131,30 @@ export class UploadComponent implements OnInit {
 
     const rootTx = await this.fileUploadManager.CreateFile(fileAsBase64, fileMetaData, this.fileToUpload.name,
       this.fileToUpload.type, '', '0.9');
-      this.showViewFileButton = true;
-      this.mostRecentTxId = rootTx;
-      const ledger = await this.fileUploadManager.GetMinLedgerVersion();
 
-      const fullLink = window.location.href;
-      const stripLink = fullLink.replace(window.location.origin, '');
-      const remainingDir = stripLink.replace('upload', '');
-      const strippedDir = remainingDir.replace('/', '');
-      if (this.fileUploadManager.rippleService.Config.IsDev) {
-        this.fileLink = 'viewFile/' + rootTx + '-' + ledger + '-testnet';
-      } else {
-        this.fileLink = 'viewFile/' + rootTx + '-' + ledger;
-      }
+    this.showIndexingFile = true;
+    const indexTxId = await this.fileUploadManager.CreateFileIndex(rootTx, this.fileToUpload.name, this.fileToUpload.type,
+      '', '0.9', this.description, this.fileToUpload.size);
+
+    // await this.fileDownloadManager.rippleFileService.GetRootFileIndexItem(indexTxId, await this.fileUploadManager.GetMinLedgerVersion());
+
+    this.showIndexingFile = false;
+
+    this.fileProgressService.RootFileProcessing = false;
+    this.fileProgressService.RootFileComplete = true;
+    this.showViewFileButton = true;
+    this.mostRecentTxId = rootTx;
+    const ledger = await this.fileUploadManager.GetMinLedgerVersion();
+
+    const fullLink = window.location.href;
+    const stripLink = fullLink.replace(window.location.origin, '');
+    const remainingDir = stripLink.replace('upload', '');
+    const strippedDir = remainingDir.replace('/', '');
+    if (this.fileUploadManager.rippleService.Config.IsDev) {
+      this.fileLink = 'viewFile/' + rootTx + '-' + ledger + '-testnet';
+    } else {
+      this.fileLink = 'viewFile/' + rootTx + '-' + ledger;
+    }
   }
 
   public constructor(private fileUploadManagerSer: FileUploadManagerService,

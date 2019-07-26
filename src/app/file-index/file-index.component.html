@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="section-title text-center">
+        <h3>Index of Files (for files afer 9:15pm CST July 25, 2019)</h3>
+    </div>
+    <div class="row index-container">
+        <div class="col-lg-2">
+            <mat-slide-toggle
+            class=""
+            color="green"
+            [(ngModel)]="IsDev"
+            (change)="toggle()">
+            Use TestNet
+            </mat-slide-toggle>
+        </div>  
+        <div class="col-lg-10"></div>
+    </div>
+    <div class="row index-container">
+        <b>
+        <div class="col-lg-2">File Name</div>
+        <div class="col-lg-2">Description</div>
+        <div class="col-lg-2">Size</div>
+        <div class="col-lg-2">Type</div>
+        <div class="col-lg-2">IMP Version</div>
+        <div class="col-lg-2"></div>
+        </b>
+    </div>
+    <div class="index-items-container">
+        <div  *ngFor="let item of items" class="row">
+            <div class="col-lg-2">{{ item.fileName }}</div>
+            <div class="col-lg-2">{{ item.description }}</div>
+            <div class="col-lg-2">{{ (item.size/1000)| number: '1.0-1' }} KB</div>
+            <div class="col-lg-2">{{ item.mimeType }}  </div>
+            <div class="col-lg-2">{{ item.Version }}  </div>
+            <div class="col-lg-2 itemLink" (click)="ViewFile(item)" >Open-> </div>
+        </div>
+    </div>
+</div>

@@ -39,6 +39,10 @@ export class AppComponent {
     this.router.navigate(['/dev']);
   }
 
+  public viewIndex() {
+    this.router.navigate(['/fileIndex']);
+  }
+
   public popXRP() {
     this.toaster.success('rPSwPXyDYELvAYKDE9JTTm8DnkqqBAWkDx', 'XRP Address',
     {

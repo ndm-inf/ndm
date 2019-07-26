@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {MainComponent} from './main/main.component';
-import {UploadComponent} from './upload/upload.component';
-import {ViewFileComponent} from './view-file/view-file.component';
-import {ViewPortalComponent} from './view-portal/view-portal.component';
-import {AnonymousComponent} from './anonymous/anonymous.component';
-import {DevComponent} from './dev/dev.component';
+import { MainComponent } from './main/main.component';
+import { UploadComponent } from './upload/upload.component';
+import { ViewFileComponent } from './view-file/view-file.component';
+import { ViewPortalComponent } from './view-portal/view-portal.component';
+import { AnonymousComponent } from './anonymous/anonymous.component';
+import { DevComponent } from './dev/dev.component';
+import { FileIndexComponent } from './file-index/file-index.component';
 
 const routes: Routes = [
    {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'dev',
     component: DevComponent
+  },
+  {
+    path: 'fileIndex',
+    component: FileIndexComponent
   }
  ];
 
