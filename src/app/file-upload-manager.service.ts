@@ -10,9 +10,9 @@ import { RootFile } from './root-file';
 import { CreateFileDetailTransactionChainResponse } from './create-file-detail-transaction-chain-response';
 import { FileUploadStatus } from './file-upload-status.enum';
 import { FileValidationStatus } from './file-validation-status.enum';
-import {FileProgressService} from './file-progress.service';
+import { FileProgressService } from './file-progress.service';
 import { RootFileIndex } from './root-file-index';
-
+import { CommentService } from './comment.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,6 +21,8 @@ export class FileUploadManagerService {
   rippleFileService: RippleFileService;
   fileProgressService: FileProgressService;
   chunkingUtility: ChunkingUtility;
+  commentService: CommentService;
+
   secret: string;
   sender: string;
   minLedgerVersions: number[] = [];
@@ -28,11 +30,13 @@ export class FileUploadManagerService {
   public UploadStatus: FileUploadStatus;
   public ValidationStatus: FileValidationStatus;
 
-  constructor(private rippleSer: RippleService, private rippleFileSer: RippleFileService, fileProgressSer: FileProgressService) {
+  constructor(private rippleSer: RippleService, private rippleFileSer: RippleFileService, fileProgressSer: FileProgressService,
+      commentSer: CommentService) {
     this.rippleService = rippleSer;
     this.rippleFileService = rippleFileSer;
     this.fileProgressService = fileProgressSer;
     this.chunkingUtility = new ChunkingUtility();
+    this.commentService = commentSer;
    }
 
   public EmptyMinLedgerVersions() {
@@ -62,7 +66,7 @@ export class FileUploadManagerService {
 
     const rootTx = await this.CreateRootFileBase(filename, fileType,
       sha, fileDetailTx.RootTx, fileMetaDataDetailTx.RootTx, fileDetailTx.FileDetails.length,
-      fileMetaDataDetailTx.FileMetaDataDetails.length, version);
+      fileMetaDataDetailTx.FileMetaDataDetails.length, version, await this.commentService.GetRandomAddressForComment());
 
     return rootTx;
   }
@@ -93,12 +97,14 @@ export class FileUploadManagerService {
   }
 
   public async CreateRootFileBase (filename: string, fileType: string, sha256: string, fileDetailTx: string,
-  fileMetaDataDetailTx: string, fileDetailTxCount: number, fileMetaDataDetailTxCount: number, version: string) {
+    fileMetaDataDetailTx: string, fileDetailTxCount: number, fileMetaDataDetailTxCount: number, version: string,
+      commentTxPointer: string) {
+
     this.fileProgressService.RootFileProcessing = true;
 
     const rootTxId = await this.rippleFileService.CreateRootFileTransaction(filename, fileType,
       sha256, fileDetailTx, fileMetaDataDetailTx, fileDetailTxCount, fileMetaDataDetailTxCount,
-       await this.GetMinLedgerVersion(), version, this.secret, this.sender);
+       await this.GetMinLedgerVersion(), version, this.secret, this.sender, commentTxPointer);
 
     while (true) {
       await this.chunkingUtility.sleep(5000);

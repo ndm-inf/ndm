@@ -67,7 +67,7 @@ export class FileDownloadManagerService {
       returnModel.mimeType = rootFile.mimeType;
       returnModel.version = rootFile.version;
       returnModel.fileName = rootFile.fileName;
-
+      returnModel.minLedgerVersion = rootFile.minLedgerVersion;
       returnModel.FileAsBase64 = await this.GetRawFile(rootFile, ledger);
       returnModel.MetaDataAsString = await this.GetRawFileDetail(rootFile, ledger);
     }

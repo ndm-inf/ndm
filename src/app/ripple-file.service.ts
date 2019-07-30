@@ -10,6 +10,8 @@ import {RootFile} from './root-file';
 import { GeneralResult } from './general-result';
 import {FileProgressService} from './file-progress.service';
 import {RootFileIndex} from './root-file-index';
+import { Comment } from './comment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -62,6 +64,12 @@ export class RippleFileService {
     return returnData;
   }
 
+  public async CreateComment(comment: Comment, secret: string, sender: string, destination: string) {
+    const tx = await this.rippleService.Prepare(comment, sender, destination);
+    const txId = await this.rippleService.SignAndSubmit(tx, secret);
+    return txId;
+  }
+
   public async CreateFileMetaDataDetailTransactionChain(metaDataAsArray, secret, sender):
     Promise<CreateFileMetaDataDetailTransactionChainResponse> {
     let prevTxId = '';
@@ -98,7 +106,7 @@ export class RippleFileService {
   }
 
   public async CreateRootFileTransaction(fileName, mimeType, sha256, fileDetailTxId, fileMetaDataDetailTxId,
-    fileDetailTxCount, fileMetaDataDetailCount, minLedgerVersion, version, secret, sender) {
+    fileDetailTxCount, fileMetaDataDetailCount, minLedgerVersion, version, secret, sender, commentTxPointer) {
     const rootFile: RootFile = new RootFile();
     rootFile.fileName = fileName;
     rootFile.mimeType = mimeType;
@@ -109,6 +117,7 @@ export class RippleFileService {
     rootFile.fileMetaDataDetailChunkCount = fileMetaDataDetailCount;
     rootFile.version = version;
     rootFile.minLedgerVersion = minLedgerVersion;
+    rootFile.cmtPtr = commentTxPointer;
 
     const tx = await this.rippleService.Prepare(rootFile, sender, this.rippleService.Config.DestinationAddress());
     const txId = await this.rippleService.SignAndSubmit(tx, secret);

@@ -53,7 +53,7 @@
    </div>
 
    <div class="container">
-        <div class="row uk-text-center upload-container">
+        <div class="row uk-text-center upload-container" [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
             <div class="col-lg-2"></div>
 
             <div class="col-lg-8">
@@ -79,7 +79,7 @@
         <div [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
                 <div (click)="SaveFile()" class="btn btn-wrapper btn-default btn-round" style="width:100%">Save File</div>
         </div>
-        <div class="row uk-text-center upload-container">
+        <div class="row uk-text-center upload-container" [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
             <div class="col-lg-2"></div>
 
             <div class="col-lg-8">
@@ -95,6 +95,60 @@
         </div>
         <div [hidden]="!fileDownloadProgressService.FileMetaDataDownloadComplete">
                 <div (click)="SaveMetaFile()" class="btn btn-wrapper btn-default btn-round" style="width:100%">Save Metadata File</div>
+        </div>
+        <br>
+        <div class="progress-container">
+        <div class="section-title text-center cmtlen">
+            <h3>Comments ({{ Comments.length }})</h3>
+        </div>
+        <div class="row uk-text-center upload-container">
+            <div class="col-lg-12">
+                    <div class="progress-container">
+                        <div class="progress-item-container">                    
+                            <h4>Ripple (XRP) Wallet </h4>
+                            XRP Address   
+                            <br>                  
+                            <input type="text'" [(ngModel)] = "sender">
+                            <br>
+                            XRP Key
+                            <br>
+                            <input type="text'" [(ngModel)] = "secret">
+                        </div>
+                      <div class="progress-item-container">
+                        <h4>Comment:</h4>
+                        <textarea [(ngModel)] = "comment" rows="5"></textarea>
+                        <div (click)="AddComment()" class="btn btn-wrapper btn-default btn-round" style="width:100%">Add Comment</div>
+                      </div>
+                    </div>
+            </div>
+        </div>
+        <div class="text-center" [hidden]="!commentsLoading">
+            <h3>Comments Loading</h3>>
+            <span style="display:inline-block"><mat-spinner ></mat-spinner></span>
+        </div>
+        <div class="text-center" [hidden]="!commentSubmitError">
+                <h3>Error submitting comment</h3>>
+        </div>
+        <div class="text-center" [hidden]="!commentsLoadedError">
+                <h3>Error Loading comments</h3>
+        </div>
+        <div class="text-center" [hidden]="!commentSubmitting">
+                <h3 class="red-error">Submitting comment</h3>
+                <span style="display:inline-block"><mat-spinner ></mat-spinner></span>
+        </div>
+        <div class="row uk-text-center upload-container"  *ngFor="let comment of Comments">
+
+            <div class="col-lg-12">
+                <div class="progress-container"> 
+                     <span class="comment-name">{{ comment.Name }}</span>
+                     <span class="comment-time">{{ comment.Time | date:'medium'}}</span>
+                    <div class="progress-item-container">
+                            {{ comment.Comment }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div (click)="RefreshComments()" class="btn btn-wrapper btn-primary btn-round" style="width:100%">Refresh Comments</div>
         </div>
         <div class="progress-container">
             <h3>&nbsp;Notes:</h3>

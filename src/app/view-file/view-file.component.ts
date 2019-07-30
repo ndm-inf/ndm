@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import {Buffer} from 'buffer';
-import {RippleService} from '../ripple.service';
-import {RippleFileService} from '../ripple-file.service';
+import { Buffer } from 'buffer';
+import { RippleService } from '../ripple.service';
+import { RippleFileService } from '../ripple-file.service';
 import { FileUploadManagerService } from '../file-upload-manager.service';
 import { FileDownloadManagerService } from '../file-download-manager.service';
 import { FileProgressService } from '../file-progress.service';
 import { FileDownloadProgressService } from '../file-download-progress.service';
 import { ActivatedRoute } from '@angular/router';
-import {FileMimeType} from '@taldor-ltd/angular-file-viewer';
-import {FileSaverOptions} from 'file-saver';
-import {FileModel} from '../file-model';
+import { FileMimeType } from '@taldor-ltd/angular-file-viewer';
+import { FileSaverOptions } from 'file-saver';
+import { FileModel } from '../file-model';
 import { saveAs } from 'file-saver';
-import {ToastrService} from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
+import { CommentService } from '../comment.service';
+import { Comment } from '../comment';
+import { CommentModel } from '../comment-model';
+import { ChunkingUtility } from '../chunking-utility';
 
 @Component({
   selector: 'app-view-file',
@@ -23,6 +27,7 @@ export class ViewFileComponent implements OnInit {
   fileProgressService: FileProgressService;
   fileDownloadProgressService: FileDownloadProgressService;
   toaster: ToastrService;
+  commentService: CommentService;
 
   Route: ActivatedRoute;
   roundRobinTest: string;
@@ -30,18 +35,34 @@ export class ViewFileComponent implements OnInit {
   src: string;
   type: FileMimeType;
   CurrentFile: FileModel;
+  comment: string;
+  sender: string;
+  secret: string;
+  rootTx: string;
+  minLedger: number;
+
+  commentsLoading = false;
+  commentsLoaded = false;
+  commentsLoadedError = false;
+  commentSubmitError = false;
+  commentSubmitting = false;
+
+  Comments: CommentModel[] = [];
+
   hideDefaultViewer = true;
   hideWebmViewer = true;
   hideGifViewer = true;
 
   public constructor(private fileUploadManagerSer: FileUploadManagerService,
     fileDownloadManagerSer: FileDownloadManagerService, fileProgressSer: FileProgressService,
-    FileDownloadProgressSer: FileDownloadProgressService, route: ActivatedRoute, tstr: ToastrService) {
+    FileDownloadProgressSer: FileDownloadProgressService, route: ActivatedRoute, tstr: ToastrService,
+    commentSer: CommentService) {
       this.fileDownloadManager = fileDownloadManagerSer;
       this.fileProgressService = fileProgressSer;
       this.fileDownloadProgressService = FileDownloadProgressSer;
       this.Route = route;
       this.toaster = tstr;
+      this.commentService = commentSer;
   }
 
   public async ViewFile(rootTx, minLedger) {
@@ -101,6 +122,85 @@ export class ViewFileComponent implements OnInit {
     }
   }
 
+  public async AddComment() {
+    if (this.comment.length === 0) {
+      this.toaster.warning('No File Chosen', 'Please choose a file to upload');
+      return;
+    }
+
+    if (this.sender.length === 0) {
+      this.toaster.warning('No XRP Addressed', 'Please enter an XRP address');
+      return;
+    }
+
+    if (this.secret.length === 0) {
+      this.toaster.warning('No XRP Secret', 'Please enter the secret for your XRP address');
+      return;
+    }
+
+    if (!(await this.fileDownloadManager.rippleService.DoesAccountExist(this.sender))) {
+      this.toaster.warning('Account does not Exit', 'Please verify your XRP Address');
+      return;
+    }
+
+    if (!await this.fileDownloadManager.rippleService.IsSenderSecretValid(this.sender, this.secret)) {
+      this.toaster.warning('Invalid Secret', 'Please verify the Secret entered for your XRP Address');
+      return;
+    }
+
+    const cmt: Comment = new Comment();
+    cmt.Comment = this.comment;
+    cmt.RootTx = this.rootTx;
+    let addCmtResult = false;
+
+    const cmtM: CommentModel = new CommentModel();
+    cmtM.Comment = cmt.Comment;
+    cmtM.RootTx = cmt.RootTx;
+    cmtM.Name = cmt.Name;
+
+    this.commentSubmitting = true;
+
+    if (this.CurrentFile.cmtPtr && this.CurrentFile.cmtPtr.length > 0) {
+      addCmtResult = await this.commentService.AddComment(cmt, this.sender, this.secret,
+        await this.commentService.GetRandomAddressForComment());
+    } else {
+      addCmtResult = await this.commentService.AddComment(cmt, this.sender, this.secret,
+        await this.commentService.GetLegacyCommentAddress());
+    }
+    if (addCmtResult) {
+      cmtM.Time = new Date();
+      this.Comments.push(cmtM);
+      this.commentSubmitError = false;
+    } else {
+      this.commentSubmitError = true;
+    }
+    this.commentSubmitting = false;
+
+  }
+
+  public async RefreshComments() {
+    while (this.commentService === null) {
+      const cu: ChunkingUtility = new ChunkingUtility();
+      await cu.sleep(1000);
+    }
+    try {
+      console.log('refreshing comments');
+      this.commentsLoadedError = false;
+      this.commentsLoading = true;
+      this.commentsLoaded = false;
+      const cmts = await this.commentService.GetComments(this.rootTx, await this.commentService.GetLegacyCommentAddress(),
+      this.minLedger);
+      this.Comments = cmts.reverse();
+      this.commentsLoadedError = false;
+      this.commentsLoading = false;
+      this.commentsLoaded = true;
+    } catch {
+      this.commentsLoadedError = true;
+      this.commentsLoading = false;
+      this.commentsLoaded = false;
+    }
+  }
+
   public async SaveFile() {
     const fileBytes = atob(this.CurrentFile.FileAsBase64);
     const fileByteArray = new Array(fileBytes.length);
@@ -139,6 +239,9 @@ export class ViewFileComponent implements OnInit {
     } else {
       this.reInit(false);
     }
+    this.rootTx = tx;
+    this.minLedger = minLedger;
+    this.RefreshComments();
     this.ViewFile(tx, minLedger);
   }
 

@@ -8,4 +8,5 @@ export class RootFile {
     public fileMetaDataDetailChunkCount: number;
     public minLedgerVersion: number;
     public version: string;
+    public cmtPtr: string;
 }
