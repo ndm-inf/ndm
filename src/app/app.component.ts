@@ -44,7 +44,7 @@ export class AppComponent {
   }
 
   public popXRP() {
-    this.toaster.success('rPSwPXyDYELvAYKDE9JTTm8DnkqqBAWkDx', 'XRP Address',
+    this.toaster.success('rw2htZCsyJk8yNRYDxjiv9QFiZ2yqCQCPJ', 'XRP Address',
     {
       closeButton: true,
       disableTimeOut: true,
@@ -53,7 +53,7 @@ export class AppComponent {
   }
 
   public popXMR() {
-    this.toaster.success('0x973d6f6810BfcF9b3C8D5CAD7cc3b22646459e9A', 'XMR Address',
+    this.toaster.success('47Nye79bFFea5Crez8xS7zjjjwBTYbSBD9mxDLfBcNPSXejx8MXxRgy545GNVEGu2HbSTyfJhHfcod9VcXXiZcYw7x3x6se', 'XMR Address',
     {
       closeButton: true,
       disableTimeOut: true,
@@ -61,7 +61,7 @@ export class AppComponent {
      });
   }
    public popBTC() {
-    this.toaster.success('13JVgkzZkGVomkvgnymfuZPtJ9ZhXRU1eg', 'BTC Address',
+    this.toaster.success('bc1q9nfy6f6t5rmd0pz0k4ygrycq7g2h5k5gg3a58k', 'BTC Address',
     {
       closeButton: true,
       disableTimeOut: true,
@@ -69,7 +69,7 @@ export class AppComponent {
      });
   }
    public popETH() {
-    this.toaster.success('0x973d6f6810bfcf9b3c8d5cad7cc3b22646459e9a', 'ETH Address',
+    this.toaster.success('0x4620b95421Fb2e04c203A7b7c836eC5C6C74fdC6', 'ETH Address',
     {
       closeButton: true,
       disableTimeOut: true,
@@ -77,7 +77,7 @@ export class AppComponent {
      });
   }
    public popLTC() {
-    this.toaster.success('ltc1qd69dtysjlahcanw3464phq8pxqtwqcly5pjeum', 'LTC Address',
+    this.toaster.success('LgiG6nz4Q7zuYdT6Z2KC6BWevRGMXqDbfP', 'LTC Address',
     {
       closeButton: true,
       disableTimeOut: true,

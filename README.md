@@ -22,12 +22,12 @@
 
 ## Donate
 
-    XRP:rJ383ZRZ1o4KCZKtDH2MDFehhaXKaiaDBu
+    XRP:rw2htZCsyJk8yNRYDxjiv9QFiZ2yqCQCPJ
 
-    XMR:495i5YirqevhLX8xi99cPwPTxKsLNTvr37mSUHxKrSZDe39oa8NRXMPah92GLNADxf9AwEo1Jf9WH1HhtxJ9HAgmNgbyCWS
+    XMR:47Nye79bFFea5Crez8xS7zjjjwBTYbSBD9mxDLfBcNPSXejx8MXxRgy545GNVEGu2HbSTyfJhHfcod9VcXXiZcYw7x3x6se
 
-    BTC:13JVgkzZkGVomkvgnymfuZPtJ9ZhXRU1eg
+    BTC:bc1q9nfy6f6t5rmd0pz0k4ygrycq7g2h5k5gg3a58k
 
-    ETH:0x973d6f6810BfcF9b3C8D5CAD7cc3b22646459e9A
+    ETH:0x4620b95421Fb2e04c203A7b7c836eC5C6C74fdC6
 
-    LTC:ltc1qd69dtysjlahcanw3464phq8pxqtwqcly5pjeum
+    LTC:LgiG6nz4Q7zuYdT6Z2KC6BWevRGMXqDbfP

@@ -30,7 +30,7 @@ export class IndImmConfigService {
 
   public DestinationAddress(): string {
     if (!this.IsDev) {
-      return 'rJ383ZRZ1o4KCZKtDH2MDFehhaXKaiaDBu'; // prod
+      return 'rw2htZCsyJk8yNRYDxjiv9QFiZ2yqCQCPJ'; // prod
     } else {
       return 'rwDaZS6khko4v6jEV9wgVpxMyEWw9o1JPb';
     }
