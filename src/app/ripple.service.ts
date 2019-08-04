@@ -156,22 +156,33 @@ export class RippleService  {
     let submitResultInNoError = false;
 
     while (!submitResultInNoError) {
-      const result = await this.doSubmit(txBlob);
-      if (result === 'telINSUF_FEE_P') {
+      const fee = await this.api.getFee();
+      console.log('Fee: ' + fee);
+        if (fee <= 0.000012) {
+        const result = await this.doSubmit(txBlob);
+        if (result === 'telINSUF_FEE_P') {
+          submitResultInNoError = false;
+          console.log('Fees too high, retrying');
+          this.FileProgressService.ShowHighFeeNotification = true;
+          this.FileProgressService.HighFeeAttemptCount++;
+          const cu: ChunkingUtility = new ChunkingUtility();
+          await cu.sleep(1000);
+        } else if (result === 'terPRE_SEQ') {
+          this.FileProgressService.ShowFatalError = true;
+          this.api.disconnect();
+          throw new Error('Fatal Error');
+        } else {
+          submitResultInNoError = true;
+          this.FileProgressService.ShowHighFeeNotification = false;
+          this.FileProgressService.HighFeeAttemptCount = 0;
+        }
+      } else {
         submitResultInNoError = false;
         console.log('Fees too high, retrying');
         this.FileProgressService.ShowHighFeeNotification = true;
         this.FileProgressService.HighFeeAttemptCount++;
         const cu: ChunkingUtility = new ChunkingUtility();
         await cu.sleep(1000);
-      } else if (result === 'terPRE_SEQ') {
-        this.FileProgressService.ShowFatalError = true;
-        this.api.disconnect();
-        throw new Error('Fatal Error');
-      } else {
-        submitResultInNoError = true;
-        this.FileProgressService.ShowHighFeeNotification = false;
-        this.FileProgressService.HighFeeAttemptCount = 0;
       }
   }
     return txID;
@@ -232,7 +243,9 @@ export class RippleService  {
       // 'Destination' : 'rwDaZS6khko4v6jEV9wgVpxMyEWw9o1JPb'
       }, {
       'maxLedgerVersionOffset': 75
-    });
+    }, {fee: '0.000013'});
+
+
 
     this.sequenceNumber++;
     console.log('Prepared transaction sequence:' + preparedTx.instructions.sequence);

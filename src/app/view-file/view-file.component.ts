@@ -90,12 +90,12 @@ export class ViewFileComponent implements OnInit {
         this.hideWebmViewer = true;
         this.hideGifViewer = true;
       } else if (response.mimeType.toLowerCase().includes('webm')) {
-        this.type = FileMimeType.WEBM;
+        // this.type = FileMimeType.WEBM;
         this.hideDefaultViewer = true;
         this.hideWebmViewer = false;
         this.hideGifViewer = true;
       }  else if (response.mimeType.toLowerCase().includes('gif')) {
-        this.type = FileMimeType.GIF;
+        // this.type = FileMimeType.GIF;
         this.hideDefaultViewer = true;
         this.hideWebmViewer = true;
         this.hideGifViewer = false;
