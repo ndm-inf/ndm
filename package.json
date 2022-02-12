@@ -23,7 +23,7 @@
     "@angular/router": "~8.1.0",
     "@taldor-ltd/angular-file-viewer": "^1.2.0",
     "@types/sjcl": "^1.0.28",
-    "ajv": "^6.10.1",
+    "ajv": "^6.12.3",
     "core-js": "^3.1.4",
     "cryptofont": "^0.1.1",
     "file-saver": "^2.0.2",
